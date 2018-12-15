@@ -64,7 +64,7 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 		cityCost += roadCost * instance.getRoadPercentage();
 		cityCost += densityCost * instance.getDensityPercentage();
 
-		this->cost += cityCost;
+		this->cost += cityCost * cityDesirability;
 	}
 
 	if(servedClients < instance.getMinServedPopulation()){
