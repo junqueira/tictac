@@ -1,3 +1,9 @@
 requests>=2.20.0
 folium
 pandas
+
+jupyter
+jupyter-client
+jupyter-console
+jupyter-core
+ipython
