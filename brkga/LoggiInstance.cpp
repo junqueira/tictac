@@ -6,6 +6,7 @@
  */
 
 #include "LoggiInstance.h"
+#include <iostream>
 
 LoggiInstance::LoggiInstance(const std::string& instanceFile){
 	std::ifstream fin(instanceFile.c_str());
@@ -20,16 +21,16 @@ LoggiInstance::LoggiInstance(const std::string& instanceFile){
 
 		this->index2CityCode[i] = cityCode;
 
-		allDistances.push_back(std::vector<double>());
-
 		fin >> populations[i];
 
 		allPopulation += populations[i];
 	}
 
 	for (int i = 0; i < (int) numCities; ++i) {
+		allDistances.push_back(std::vector<double>());
+
 		for (int j = 0; j < (int) numCities; j++) {
-			int distanceFromIToJ;
+			double distanceFromIToJ;
 			fin >> distanceFromIToJ;
 
 			allDistances[i].push_back(distanceFromIToJ);
@@ -38,6 +39,10 @@ LoggiInstance::LoggiInstance(const std::string& instanceFile){
 }
 
 LoggiInstance::~LoggiInstance() { }
+
+int LoggiInstance::getCityId(int index){
+	return index2CityCode[index];
+}
 
 int LoggiInstance::getNumCities(){
 	return this->numCities;
@@ -81,5 +86,5 @@ std::unordered_map<int, int> LoggiInstance::getPopulations(){
 
 unsigned LoggiInstance::getMinServedPopulation(){
 	//TODO: get real min
-	return 0.7 * allPopulation;
+	return 0.5 * allPopulation;
 }

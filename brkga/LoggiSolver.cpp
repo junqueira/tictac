@@ -18,7 +18,7 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 	std::vector<int> storages;
 	
 	//check viability
-	double servedClients = 0.0;
+	int servedClients = 0.0;
 
 	for (int i = 0; i < instance.getNumCities(); ++i) {
 		int j = i + instance.getNumCities();
@@ -36,7 +36,7 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 	for (int i = 0; i < instance.getNumCities(); ++i) {
 		double cityDesirability = chromosome[i];
 
-		servedClients += populations[i] * cityDesirability;
+		servedClients += (int) populations[i] * cityDesirability;
 
 		double distanceKM = INF_DOUBLE;
 
@@ -67,7 +67,7 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 		this->cost += cityCost * cityDesirability;
 	}
 
-	if(servedClients < instance.getMinServedPopulation()){
+	if(servedClients < instance.getMinServedPopulation() || storages.size() < 1){
 		this->cost = INF_INT;
 	}
 }

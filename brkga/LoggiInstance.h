@@ -30,6 +30,7 @@ public:
 	std::unordered_set<int> getCitiesWithAirport();
 	std::unordered_map<int, int> getPopulations();
 	unsigned getMinServedPopulation();
+	int getCityId(int index);
 
 private:
 	unsigned numCities = 0;

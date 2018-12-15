@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
 	// BRKGA inner loop (evolution) configuration: Exchange top individuals
 	const unsigned X_INTVL = 100;	// exchange best individuals at every 100 generations
 	const unsigned X_NUMBER = 2;	// exchange top 2 best
-	const unsigned MAX_GENS = 50;	// run for 1000 gens
+	const unsigned MAX_GENS = 100;	// run for 1000 gens
 
 	// BRKGA evolution configuration: restart strategy
 	unsigned relevantGeneration = 1;	// last relevant generation: best updated or reset called
@@ -98,6 +98,8 @@ int main(int argc, char* argv[]) {
 	do {
 		std::cout << "GEN: " << generation << std::endl;
 		algorithm.evolve();	// evolve the population for one generation
+
+		std::cout << "best fitness found: " << algorithm.getBestFitness() << std::endl;
 
 		// Bookeeping: has the best solution thus far improved?
 		if(algorithm.getBestFitness() < bestFitness) {
@@ -146,9 +148,15 @@ int main(int argc, char* argv[]) {
 	// rebuild the best solution:
 	LoggiSolver bestSolution(instance, bestChromosome);
 
+	int biggestCity = 0;
+
 	for (int i = 0; i < instance.getNumCities(); ++i) {
+		biggestCity = bestChromosome[i] > bestChromosome[biggestCity] ? i : biggestCity;
 		std::cout << "City " << i << ": " << bestChromosome[i] << std::endl;
 	}
+
+	std::cout << "Most desirable city: " << instance.getCityId(biggestCity) << std::endl;
+
 
 	// print its distance:
 	std::cout << "Best solution found has objective value = "
