@@ -34,6 +34,7 @@ public:
 private:
 	unsigned numCities = 0;
 	unsigned servedPopulation = 0;
+	unsigned allPopulation = 0;
 	std::vector<std::vector<double>> allDistances = {};
 	std::unordered_map<int, int> index2CityCode = {};
 	std::unordered_map<int, int> populations = {};

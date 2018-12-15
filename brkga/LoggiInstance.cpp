@@ -22,15 +22,18 @@ LoggiInstance::LoggiInstance(const std::string& instanceFile){
 
 		allDistances.push_back(std::vector<double>());
 
+		fin >> populations[i];
+
+		allPopulation += populations[i];
+	}
+
+	for (int i = 0; i < (int) numCities; ++i) {
 		for (int j = 0; j < (int) numCities; j++) {
 			int distanceFromIToJ;
 			fin >> distanceFromIToJ;
 
 			allDistances[i].push_back(distanceFromIToJ);
 		}
-
-		//TODO: get real population
-		populations[i] = 1000;
 	}
 }
 
@@ -61,11 +64,11 @@ double LoggiInstance::getDensityPercentage(){
 }
 
 double LoggiInstance::getCostByAir(){
-	return 10.0;
+	return 7.0;
 }
 
 double LoggiInstance::getCostByRoad(){
-	return 10.0;
+	return 9.0;
 }
 
 std::unordered_set<int> LoggiInstance::getCitiesWithAirport(){
@@ -78,5 +81,5 @@ std::unordered_map<int, int> LoggiInstance::getPopulations(){
 
 unsigned LoggiInstance::getMinServedPopulation(){
 	//TODO: get real min
-	return 999999;
+	return 0.7 * allPopulation;
 }

@@ -146,6 +146,10 @@ int main(int argc, char* argv[]) {
 	// rebuild the best solution:
 	LoggiSolver bestSolution(instance, bestChromosome);
 
+	for (int i = 0; i < instance.getNumCities(); ++i) {
+		std::cout << "City " << i << ": " << bestChromosome[i] << std::endl;
+	}
+
 	// print its distance:
 	std::cout << "Best solution found has objective value = "
 	 		<< bestSolution.getCost() << std::endl;
