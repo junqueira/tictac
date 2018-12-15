@@ -60,10 +60,6 @@ double LoggiInstance::getCriminalityPercentage(){
 	return 1.0;
 }
 
-double LoggiInstance::getRoadPercentage(){
-	return 1.0;
-}
-
 double LoggiInstance::getDensityPercentage(){
 	return 1.0;
 }

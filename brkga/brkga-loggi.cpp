@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
 	// BRKGA inner loop (evolution) configuration: Exchange top individuals
 	const unsigned X_INTVL = 100;	// exchange best individuals at every 100 generations
 	const unsigned X_NUMBER = 2;	// exchange top 2 best
-	const unsigned MAX_GENS = 33;	// run for 1000 gens
+	const unsigned MAX_GENS = 1000;	// run for 1000 gens
 
 	// BRKGA evolution configuration: restart strategy
 	unsigned relevantGeneration = 1;	// last relevant generation: best updated or reset called
@@ -150,13 +150,37 @@ int main(int argc, char* argv[]) {
 
 	int biggestCity = 0;
 
+	std::vector<int> cities;
+
 	for (int i = 0; i < instance.getNumCities(); ++i) {
-		biggestCity = bestChromosome[i] > bestChromosome[biggestCity] ? i : biggestCity;
-		std::cout << "City " << i << ": " << bestChromosome[i] << std::endl;
+		cities.push_back(i);
 	}
 
-	std::cout << "Most desirable city: " << instance.getCityId(biggestCity) << std::endl;
+	std::sort(cities.begin(), cities.end(), [&bestChromosome](const int& a, const int& b) -> bool {
+			return bestChromosome[a] > bestChromosome[b];
+			});
 
+	int servedUsers = 0;
+
+	for (int i = 0; i < instance.getNumCities(); ++i) {
+		if(bestChromosome[i+instance.getNumCities()] > 0.5){
+			std::cout << "Open storage on " << instance.getCityId(i) << std::endl;
+		}
+	}
+
+	std::cout << std::endl;
+
+	int i = 0;
+	while(servedUsers < instance.getMinServedPopulation()){
+		std::cout << "Serve city: " << instance.getCityId(cities[i]) << std::endl;
+		servedUsers += instance.getPopulations()[cities[i]];
+		i++;
+	}
+
+
+	
+
+	std::cout << "Most desirable city: " << instance.getCityId(biggestCity) << std::endl;
 
 	// print its distance:
 	std::cout << "Best solution found has objective value = "

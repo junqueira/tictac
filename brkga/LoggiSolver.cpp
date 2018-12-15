@@ -51,9 +51,6 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 		double criminalityCost = 0.0;
 		//TODO: Measure criminality cost
 
-		double roadCost = 0.0;
-		//TODO: Measure road cost
-
 		double densityCost = 0.0;
 		//TODO: Measure "density" cost
 
@@ -61,7 +58,6 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 
 		cityCost += distanceCost * instance.getDistancePercentage();
 		cityCost += criminalityCost * instance.getCriminalityPercentage();
-		cityCost += roadCost * instance.getRoadPercentage();
 		cityCost += densityCost * instance.getDensityPercentage();
 
 		this->cost += cityCost * cityDesirability;

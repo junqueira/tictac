@@ -21,7 +21,6 @@ public:
 	int getNumCities();
 	double getDistancePercentage();
 	double getCriminalityPercentage();
-	double getRoadPercentage();
 	double getDensityPercentage();
 	double getCostByAir();
 	double getCostByRoad();
