@@ -7,12 +7,18 @@
 
 #include "LoggiSolver.h"
 #define INF_DOUBLE 99999999
+#define INF_INT 99999999
+
+#include <iostream>
 
 LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& chromosome) {
 	//Start the solution cost with 0.0
 	this->cost = 0.0;
 
 	std::vector<int> storages;
+	
+	//check viability
+	double servedClients = 0.0;
 
 	for (int i = 0; i < instance.getNumCities(); ++i) {
 		int j = i + instance.getNumCities();
@@ -24,10 +30,13 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 
 	auto distances = instance.getDistances();
 	auto citiesWithAirport = instance.getCitiesWithAirport();
+	auto populations = instance.getPopulations();
 
 	//For each city (in the chromosome)
 	for (int i = 0; i < instance.getNumCities(); ++i) {
 		double cityDesirability = chromosome[i];
+
+		servedClients += populations[i] * cityDesirability;
 
 		double distanceKM = INF_DOUBLE;
 
@@ -55,7 +64,11 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 		cityCost += roadCost * instance.getRoadPercentage();
 		cityCost += densityCost * instance.getDensityPercentage();
 
-		this->cost += cityCost * cityDesirability;
+		this->cost += cityCost;
+	}
+
+	if(servedClients < instance.getMinServedPopulation()){
+		this->cost = INF_INT;
 	}
 }
 

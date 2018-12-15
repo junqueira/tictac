@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
 	// BRKGA inner loop (evolution) configuration: Exchange top individuals
 	const unsigned X_INTVL = 100;	// exchange best individuals at every 100 generations
 	const unsigned X_NUMBER = 2;	// exchange top 2 best
-	const unsigned MAX_GENS = 1000;	// run for 1000 gens
+	const unsigned MAX_GENS = 50;	// run for 1000 gens
 
 	// BRKGA evolution configuration: restart strategy
 	unsigned relevantGeneration = 1;	// last relevant generation: best updated or reset called
@@ -96,6 +96,7 @@ int main(int argc, char* argv[]) {
 	// Run the evolution loop:
 	unsigned generation = 1;		// current generation
 	do {
+		std::cout << "GEN: " << generation << std::endl;
 		algorithm.evolve();	// evolve the population for one generation
 
 		// Bookeeping: has the best solution thus far improved?

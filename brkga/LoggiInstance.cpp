@@ -28,6 +28,9 @@ LoggiInstance::LoggiInstance(const std::string& instanceFile){
 
 			allDistances[i].push_back(distanceFromIToJ);
 		}
+
+		//TODO: get real population
+		populations[i] = 1000;
 	}
 }
 
@@ -58,13 +61,22 @@ double LoggiInstance::getDensityPercentage(){
 }
 
 double LoggiInstance::getCostByAir(){
-	return 1.0;
+	return 10.0;
 }
 
 double LoggiInstance::getCostByRoad(){
-	return 1.0;
+	return 10.0;
 }
 
 std::unordered_set<int> LoggiInstance::getCitiesWithAirport(){
 	return this->citiesWithAirport;
+}
+
+std::unordered_map<int, int> LoggiInstance::getPopulations(){
+	return this->populations;
+}
+
+unsigned LoggiInstance::getMinServedPopulation(){
+	//TODO: get real min
+	return 999999;
 }
