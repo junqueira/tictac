@@ -15,12 +15,12 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 	//Start the solution cost with 0.0
 	this->cost = 0.0;
 
-	std::vector<int> storages;
+	std::vector<int> storages = {0};
 	
 	//check viability
 	int servedClients = 0.0;
 
-	for (int i = 0; i < instance.getNumCities(); ++i) {
+	for (int i = 1; i < instance.getNumCities(); ++i) {
 		int j = i + instance.getNumCities();
 
 		if(chromosome[j] > 0.500){
@@ -63,7 +63,7 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 		this->cost += cityCost * cityDesirability;
 	}
 
-	this->cost += storages.size() * instance.getStorageCost();
+	this->cost += (storages.size()-1) * instance.getStorageCost();
 
 	if(servedClients < instance.getMinServedPopulation() || storages.size() < 1){
 		this->cost = INF_INT;

@@ -162,9 +162,12 @@ int main(int argc, char* argv[]) {
 
 	int servedUsers = 0;
 
+	std::vector<int> _storages;
+	std::vector<int> _cities;
+
 	for (int i = 0; i < instance.getNumCities(); ++i) {
 		if(bestChromosome[i+instance.getNumCities()] > 0.5){
-			std::cout << "Open storage on " << instance.getCityId(i) << std::endl;
+			_storages.push_back(instance.getCityId(i));
 		}
 	}
 
@@ -172,12 +175,18 @@ int main(int argc, char* argv[]) {
 
 	int i = 0;
 	while(servedUsers < instance.getMinServedPopulation()){
-		std::cout << "Serve city: " << instance.getCityId(cities[i]) << std::endl;
+		_storages.push_back(instance.getCityId(cities[i]));
 		servedUsers += instance.getPopulations()[cities[i]];
 		i++;
 	}
 
+	std::cout << _storages.size() << std::endl;
+	for(auto st : _storages)
+		std::cout << st << std::endl;
 
+	std::cout << _cities.size() << std::endl;
+	for(auto st : _cities)
+		std::cout << st << std::endl;
 	
 
 	std::cout << "Most desirable city: " << instance.getCityId(biggestCity) << std::endl;
