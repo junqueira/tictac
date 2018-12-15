@@ -31,6 +31,7 @@ public:
 	std::unordered_map<int, int> getPopulations();
 	unsigned getMinServedPopulation();
 	int getCityId(int index);
+	int getStorageCost();
 
 private:
 	unsigned numCities = 0;

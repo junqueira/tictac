@@ -88,3 +88,7 @@ unsigned LoggiInstance::getMinServedPopulation(){
 	//TODO: get real min
 	return 0.5 * allPopulation;
 }
+
+int LoggiInstance::getStorageCost(){
+	return 200000;
+}

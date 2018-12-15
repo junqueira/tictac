@@ -23,7 +23,7 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 	for (int i = 0; i < instance.getNumCities(); ++i) {
 		int j = i + instance.getNumCities();
 
-		if(chromosome[j] > 0.999){
+		if(chromosome[j] > 0.500){
 			storages.push_back(j);
 		}
 	}
@@ -66,6 +66,8 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 
 		this->cost += cityCost * cityDesirability;
 	}
+
+	this->cost += storages.size() * instance.getStorageCost();
 
 	if(servedClients < instance.getMinServedPopulation() || storages.size() < 1){
 		this->cost = INF_INT;
