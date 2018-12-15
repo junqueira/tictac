@@ -56,3 +56,15 @@ double LoggiInstance::getRoadPercentage(){
 double LoggiInstance::getDensityPercentage(){
 	return 1.0;
 }
+
+double LoggiInstance::getCostByAir(){
+	return 1.0;
+}
+
+double LoggiInstance::getCostByRoad(){
+	return 1.0;
+}
+
+std::unordered_set<int> LoggiInstance::getCitiesWithAirport(){
+	return this->citiesWithAirport;
+}
