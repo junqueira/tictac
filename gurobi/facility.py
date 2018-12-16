@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import numpy as np
 from gurobipy import *
 
 f = open("../data/input.in","r")
@@ -10,6 +11,8 @@ pop = np.zeros(n)
 
 for i in range(n):
     cod[i], pop[i] = map(int, f.readline().split())
+    if int(cod[i]) == 3509205:
+        cajamar = i
 
 dist = [[] for _ in range(n)]
 for i in range(n):
@@ -17,32 +20,27 @@ for i in range(n):
 
 hasAirport = [False] * n
 
-
-# Fixed costs for each plant
 fixedCosts = 90000
 
 MINIMUM_POPULATION = 0.6 * sum(pop)
 
-# Range of plants and warehouses
 locations = range(n)
 
-# Model
 m = Model("facility")
 
-# Plant open decision variables: open[p] == 1 if plant p is open.
 open = m.addVars(locations,
                  vtype=GRB.BINARY,
-                 obj=fixedCosts,
+                 obj=0.0,
                  name="open")
 
 storage = m.addVars(locations,
                  vtype=GRB.BINARY,
-                 obj=fixedCosts,
+                 obj=0.0,
                  name="storage")
 
 # Transportation decision variables: transport[w,p] captures the
 # optimal quantity to transport to warehouse w from plant p
-transport = m.addVars(locations, locations, obj=dist, name="trans")
+transport = [m.addVars(locations, obj=0.0, name="trans%d" % p) for p in locations]
 
 # The objective is to minimize the total fixed and variable costs
 m.modelSense = GRB.MINIMIZE
@@ -51,56 +49,50 @@ obj = LinExpr()
 
 for p in locations:
     obj += open[p] * (0.0)
+    obj += storage[p] * fixedCosts
 
 for p in locations:
     for w in locations:
-        obj += transport[w][p] * (dist[w][u] * (7.0 if hasAirport[u] else 9.0))
+        obj += transport[w][p] * (dist[w][p] * (7.0 if hasAirport[p] else 9.0))
 
 m.setObjective(obj)
 
 for p in locations:
     for w in locations:
-      m.addConstr(transport[w][p] <= open[p], "open[%d]" % p)
+      m.addConstr(transport[w][p] <= open[p], "open[%d,%d]" % (p, w))
       m.addConstr(transport[w][p] <= storage[w], "storage[%d]" % w)
 
-m.addConstr(sum(sum(transport[w][p] for p in locations)*population[w] for p in
-    locations) >= MINIMUM_POPULATION)
+for p in locations:
+    m.addConstr(open[p] <= sum([transport[w][p] for w in locations]))
 
-for w in locations:
-    m.addConstr(sum(transport[w][p] for p in locations) >= open[p],
-            "transport[%d]" % w)
+sumServed = LinExpr()
+
+for p in locations:
+    sumServed += open[p] * pop[p]
+
+m.addConstr(sumServed >= MINIMUM_POPULATION)
+
+m.addConstr(storage[cajamar] == 1.0)
 # Save model
 m.write('facilityPY.lp')
 
 # First, open all plants
-for p in plants:
-    open[p].start = 1.0
+# for p in plants:
+#     open[p].start = 1.0
 
 # Now close the plant with the highest fixed cost
-print('Initial guess:')
-maxFixed = max(fixedCosts)
-for p in plants:
-    if fixedCosts[p] == maxFixed:
-        open[p].start = 0.0
-        print('Closing plant %s' % p)
-        break
-print('')
-
-# Use barrier to solve root relaxation
-m.Params.method = 2
+#m.Params.method = 2
 
 # Solve
 m.optimize()
 
 # Print solution
-print('\nTOTAL COSTS: %g' % m.objVal)
-print('SOLUTION:')
-for p in plants:
-    if open[p].x > 0.99:
-        print('Plant %s open' % p)
-        for w in warehouses:
-            if transport[w,p].x > 0:
-                print('  Transport %g units to warehouse %s' % \
-                      (transport[w,p].x, w))
-    else:
-        print('Plant %s closed!' % p)
+
+storages = [p for p in locations if storage[p].x > 0.99]
+cities = [p for p in locations if open[p].x > 0.99]
+
+print(len(storages))
+print "\n".join([str(int(cod[p])) for p in storages])
+
+print(len(cities))
+print "\n".join([str(int(cod[p])) for p in cities])
