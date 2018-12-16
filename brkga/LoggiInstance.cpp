@@ -19,6 +19,10 @@ LoggiInstance::LoggiInstance(const std::string& instanceFile){
 
 		fin >> cityCode;
 
+		if(cityCode == 3509205){
+			cajamar = i;
+		}
+
 		this->index2CityCode[i] = cityCode;
 
 		fin >> populations[i];
@@ -94,4 +98,8 @@ unsigned LoggiInstance::getMinServedPopulation(){
 
 int LoggiInstance::getStorageCost(){
 	return 90000;
+}
+
+unsigned LoggiInstance::getCajamar(){
+	return this->cajamar;
 }

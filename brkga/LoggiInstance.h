@@ -33,8 +33,10 @@ public:
 	unsigned getMinServedPopulation();
 	int getCityId(int index);
 	int getStorageCost();
+	unsigned getCajamar();
 
 private:
+	unsigned cajamar = 0;
 	unsigned numCities = 0;
 	unsigned servedPopulation = 0;
 	unsigned allPopulation = 0;

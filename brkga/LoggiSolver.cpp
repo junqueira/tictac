@@ -15,12 +15,15 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 	//Start the solution cost with 0.0
 	this->cost = 0.0;
 
-	std::vector<int> storages = {0};
+	std::vector<int> storages = {instance.getCajamar()};
 	
 	//check viability
 	int servedClients = 0.0;
 
-	for (int i = 1; i < instance.getNumCities(); ++i) {
+	for (int i = 0; i < instance.getNumCities(); ++i) {
+		if(i == instance.getCajamar())
+			continue;
+
 		int j = i + instance.getNumCities();
 
 		if(chromosome[j] > 0.500){
@@ -44,6 +47,14 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 
 		for(auto& storage : storages){
 			double newDistance = distances[i][storage];
+
+			if(storage == i){
+				if(i == instance.getCajamar()){
+					newDistance = 0;
+				}else{
+					newDistance = distances[i][instance.getCajamar()];
+				}
+			}
 			distanceKM = newDistance < distanceKM ? newDistance : distanceKM;
 		}
 
