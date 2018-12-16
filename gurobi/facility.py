@@ -10,6 +10,7 @@ cod = np.zeros(n)
 pop = np.zeros(n)
 idh = [0.0] * n
 wage = [0.0] * n
+crime = [0.0] * n
 
 starters = []
 
@@ -33,7 +34,7 @@ nodes = [
 
 for i in range(n):
     item = f.readline().split()
-    cod[i], pop[i], idh[i], wage[i] = int(item[0]), int(item[1]), float(item[2]), float(item[3])
+    cod[i], pop[i], idh[i], wage[i], crime[i] = int(item[0]), int(item[1]), float(item[2]), float(item[3]), int(item[4])
 
     if int(cod[i]) == 3509205:
         cajamar = i
@@ -47,7 +48,7 @@ for i in range(n):
 
 hasAirport = [False] * n
 
-fixedCosts = 90000
+fixedCosts = 20000
 
 MINIMUM_POPULATION = 0.6 * sum(pop)
 
@@ -75,17 +76,21 @@ m.modelSense = GRB.MINIMIZE
 idhAvg = sum(idh)/len(idh)
 idhMax = max(idh)
 
+popuAvg = sorted(pop)[int(len(pop) * 0.6)]
+popuMax = max(pop)
+
 obj = LinExpr()
 
 for p in locations:
     obj += storage[p] * fixedCosts
-    obj += open[p] * (1 - (0.1 * ((idh[p] - idhAvg) / (idhMax)) * dist[[w for w in locations if storage[w] and transport[w][p]][0]][p]))
-    obj -= open[p] * pop[p] * 0.5
-    obj -= open[p] * wage[p] * 0.2
+    obj += open[p] * (1 - (0.1 * ((idh[p] - idhAvg) / (idhMax)) * dist[[w for w in locations if transport[w][p]][0]][p]))
+    obj += open[p] * (1 - (0.1 * ((pop[p] - popuAvg) / (popuMax)) ))
+    obj += open[p] * crime[p] * 0.05
+    obj -= open[p] * wage[p] * 0.005
 
 for p in locations:
     for w in locations:
-        obj += (transport[w][p] * (dist[w][p] * (7.0 if hasAirport[p] else 9.0))) * 0.5
+        obj += (transport[w][p] * (dist[w][p] * (7.0 if hasAirport[p] else 9.0))) * 0.3
 
 m.setObjective(obj)
 

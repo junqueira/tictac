@@ -52,6 +52,7 @@ private:
 	std::unordered_map<int, int> wills = {};
 	std::unordered_map<int, int> criminalities = {};
 	std::unordered_map<int, int> individualWage = {};
+	std::unordered_map<int, int> crimes = {};
 	std::unordered_set<int> citiesWithAirport = {};
 
 };

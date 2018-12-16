@@ -28,6 +28,7 @@ LoggiInstance::LoggiInstance(const std::string& instanceFile){
 		fin >> populations[i];
 		fin >> idhs[i];
 		fin >> individualWage[i];
+		fin >> crimes[i];
 
 		allPopulation += populations[i];
 	}
