@@ -63,7 +63,7 @@ for p in locations:
       m.addConstr(transport[w][p] <= storage[w], "storage[%d]" % w)
 
 for p in locations:
-    m.addConstr(open[p] <= sum([transport[w][p] for w in locations]))
+    m.addConstr(open[p] == sum([transport[w][p] for w in locations]))
 
 sumServed = LinExpr()
 
@@ -92,7 +92,7 @@ storages = [p for p in locations if storage[p].x > 0.99]
 cities = [p for p in locations if open[p].x > 0.99]
 
 print(len(storages))
-print "\n".join([str(int(cod[p])) for p in storages])
+print " ".join([str(int(cod[p])) for p in storages])
 
 print(len(cities))
-print "\n".join([str(int(cod[p])) for p in cities])
+print " ".join([str(int(cod[p])) for p in cities])
