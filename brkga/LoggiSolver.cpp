@@ -31,6 +31,8 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 	auto distances = instance.getDistances();
 	auto citiesWithAirport = instance.getCitiesWithAirport();
 	auto populations = instance.getPopulations();
+	auto criminalities = instance.getCriminalities();
+	auto wills = instance.getWills();
 
 	//For each city (in the chromosome)
 	for (int i = 0; i < instance.getNumCities(); ++i) {
@@ -48,17 +50,15 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 		double distanceCost = distanceKM 
 			* (citiesWithAirport.count(i) ? instance.getCostByAir() : instance.getCostByRoad());
 
-		double criminalityCost = 0.0;
-		//TODO: Measure criminality cost
+		double criminalityCost = criminalities[i];
 
-		double densityCost = 0.0;
-		//TODO: Measure "density" cost
+		double willCost = wills[i];
 
 		double cityCost = 0.0;
 
 		cityCost += distanceCost * instance.getDistancePercentage();
 		cityCost += criminalityCost * instance.getCriminalityPercentage();
-		cityCost += densityCost * instance.getDensityPercentage();
+		cityCost += willCost * instance.getWillPercentage();
 
 		this->cost += cityCost * cityDesirability;
 	}

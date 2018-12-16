@@ -175,7 +175,7 @@ int main(int argc, char* argv[]) {
 
 	int i = 0;
 	while(servedUsers < instance.getMinServedPopulation()){
-		_storages.push_back(instance.getCityId(cities[i]));
+		_cities.push_back(instance.getCityId(cities[i]));
 		servedUsers += instance.getPopulations()[cities[i]];
 		i++;
 	}

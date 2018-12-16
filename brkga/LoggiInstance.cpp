@@ -60,7 +60,7 @@ double LoggiInstance::getCriminalityPercentage(){
 	return 1.0;
 }
 
-double LoggiInstance::getDensityPercentage(){
+double LoggiInstance::getWillPercentage(){
 	return 1.0;
 }
 
@@ -76,15 +76,22 @@ std::unordered_set<int> LoggiInstance::getCitiesWithAirport(){
 	return this->citiesWithAirport;
 }
 
+std::unordered_map<int, int> LoggiInstance::getWills(){
+	return this->wills;
+}
+
+std::unordered_map<int, int> LoggiInstance::getCriminalities(){
+	return this->criminalities;
+}
+
 std::unordered_map<int, int> LoggiInstance::getPopulations(){
 	return this->populations;
 }
 
 unsigned LoggiInstance::getMinServedPopulation(){
-	//TODO: get real min
-	return 0.5 * allPopulation;
+	return 0.6 * allPopulation;
 }
 
 int LoggiInstance::getStorageCost(){
-	return 200000;
+	return 90000;
 }
