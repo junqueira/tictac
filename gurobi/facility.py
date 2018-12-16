@@ -8,11 +8,38 @@ n = int(f.readline())
 
 cod = np.zeros(n)
 pop = np.zeros(n)
+idh = [0.0] * n
+wage = [0.0] * n
+
+starters = []
+
+nodes = [
+        3550308,
+        3304557,
+        5300108,
+        2927408,
+        2304400,
+        3106200,
+        1302603,
+        4106902,
+        2611606,
+        4314902,
+        5208707,
+        3509502,
+        3549904,
+        3543402,
+        3548500
+        ]
 
 for i in range(n):
-    cod[i], pop[i] = map(int, f.readline().split())
+    item = f.readline().split()
+    cod[i], pop[i], idh[i], wage[i] = int(item[0]), int(item[1]), float(item[2]), float(item[3])
+
     if int(cod[i]) == 3509205:
         cajamar = i
+
+    if int(cod[i]) in nodes:
+        starters.append(i)
 
 dist = [[] for _ in range(n)]
 for i in range(n):
@@ -45,15 +72,20 @@ transport = [m.addVars(locations, obj=0.0, name="trans%d" % p) for p in location
 # The objective is to minimize the total fixed and variable costs
 m.modelSense = GRB.MINIMIZE
 
+idhAvg = sum(idh)/len(idh)
+idhMax = max(idh)
+
 obj = LinExpr()
 
 for p in locations:
-    obj += open[p] * (0.0)
     obj += storage[p] * fixedCosts
+    obj += open[p] * (1 - (0.1 * ((idh[p] - idhAvg) / (idhMax)) * dist[[w for w in locations if storage[w] and transport[w][p]][0]][p]))
+    obj -= open[p] * pop[p] * 0.5
+    obj -= open[p] * wage[p] * 0.2
 
 for p in locations:
     for w in locations:
-        obj += transport[w][p] * (dist[w][p] * (7.0 if hasAirport[p] else 9.0))
+        obj += (transport[w][p] * (dist[w][p] * (7.0 if hasAirport[p] else 9.0))) * 0.5
 
 m.setObjective(obj)
 
@@ -73,6 +105,9 @@ for p in locations:
 m.addConstr(sumServed >= MINIMUM_POPULATION)
 
 m.addConstr(storage[cajamar] == 1.0)
+
+for starter in starters:
+    m.addConstr(open[starter] == 1.0)
 # Save model
 m.write('facilityPY.lp')
 

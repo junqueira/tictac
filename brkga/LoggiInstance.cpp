@@ -26,6 +26,8 @@ LoggiInstance::LoggiInstance(const std::string& instanceFile){
 		this->index2CityCode[i] = cityCode;
 
 		fin >> populations[i];
+		fin >> idhs[i];
+		fin >> individualWage[i];
 
 		allPopulation += populations[i];
 	}
@@ -54,6 +56,10 @@ int LoggiInstance::getNumCities(){
 
 std::vector<std::vector<double>> LoggiInstance::getDistances(){
 	return this->allDistances;
+}
+
+double LoggiInstance::getIndividualWagePercentage(){
+	return 0.5;
 }
 
 double LoggiInstance::getDistancePercentage(){
@@ -92,6 +98,14 @@ std::unordered_map<int, int> LoggiInstance::getPopulations(){
 	return this->populations;
 }
 
+std::unordered_map<int, int> LoggiInstance::getIndividualWage(){
+	return this->individualWage;
+}
+
+std::unordered_map<int, double> LoggiInstance::getIDHs(){
+	return this->idhs;
+}
+
 unsigned LoggiInstance::getMinServedPopulation(){
 	return 0.6 * allPopulation;
 }
@@ -102,4 +116,12 @@ int LoggiInstance::getStorageCost(){
 
 unsigned LoggiInstance::getCajamar(){
 	return this->cajamar;
+}
+
+double LoggiInstance::getIDHPercentage(){
+	return 1.0;
+}
+
+double LoggiInstance::getPopulationPercentage(){
+	return 1.0;
 }

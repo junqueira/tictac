@@ -35,7 +35,9 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 	auto citiesWithAirport = instance.getCitiesWithAirport();
 	auto populations = instance.getPopulations();
 	auto criminalities = instance.getCriminalities();
+	auto idhs = instance.getIDHs();
 	auto wills = instance.getWills();
+	auto individualWage = instance.getIndividualWage();
 
 	//For each city (in the chromosome)
 	for (int i = 0; i < instance.getNumCities(); ++i) {
@@ -67,9 +69,23 @@ LoggiSolver::LoggiSolver(LoggiInstance& instance, const std::vector< double >& c
 
 		double cityCost = 0.0;
 
+		double idhAvg = 0.0;
+		double idhMax = 0.0;
+
+		for(auto item : idhs){
+			double idh = item.second;
+			idhAvg += idh;
+			idhMax = idh > idhMax ? idh : idhMax;
+		}
+
+		idhAvg /= idhs.size();
+
 		cityCost += distanceCost * instance.getDistancePercentage();
+		cityCost -= populations[i] * instance.getPopulationPercentage();
 		cityCost += criminalityCost * instance.getCriminalityPercentage();
 		cityCost += willCost * instance.getWillPercentage();
+		cityCost -= individualWage[i] * instance.getIndividualWagePercentage();
+		cityCost += (1 - (0.1 * ((idhs[i] - idhAvg) / (idhMax)))) * distanceKM * instance.getIDHPercentage();
 
 		this->cost += cityCost * cityDesirability;
 	}

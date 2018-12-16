@@ -22,6 +22,9 @@ public:
 	double getDistancePercentage();
 	double getCriminalityPercentage();
 	double getWillPercentage();
+	double getPopulationPercentage();
+	double getIndividualWagePercentage();
+	double getIDHPercentage();
 	double getCostByAir();
 	double getCostByRoad();
 
@@ -30,6 +33,8 @@ public:
 	std::unordered_map<int, int> getPopulations();
 	std::unordered_map<int, int> getWills();
 	std::unordered_map<int, int> getCriminalities();
+	std::unordered_map<int, double> getIDHs();
+	std::unordered_map<int, int> getIndividualWage();
 	unsigned getMinServedPopulation();
 	int getCityId(int index);
 	int getStorageCost();
@@ -43,8 +48,10 @@ private:
 	std::vector<std::vector<double>> allDistances = {};
 	std::unordered_map<int, int> index2CityCode = {};
 	std::unordered_map<int, int> populations = {};
+	std::unordered_map<int, double> idhs = {};
 	std::unordered_map<int, int> wills = {};
 	std::unordered_map<int, int> criminalities = {};
+	std::unordered_map<int, int> individualWage = {};
 	std::unordered_set<int> citiesWithAirport = {};
 
 };
